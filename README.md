@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/RooPOS1-removebg.png" alt="Logo" width="400"/>
+</p>
+
 # RooPOS
 
 RooPOS is a lightweight **ERP & POS system** designed for small local businesses such as supermarkets, pharmacies, and retail shops.
