@@ -1,3 +1,9 @@
+using Application;
+using Hangfire;
+using Infrastructure;
+using Infrastructure.Data.Seeding;
+using Infrastructure.Logging;
+using Serilog;
 using Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +51,8 @@ app.MapControllers();
 app.UseSerilogRequestLogging();
 
 app.UseHangfireDashboard("/hangfire");
+
+await app.InitializeDatabaseAsync();
 
 app.Run();
 

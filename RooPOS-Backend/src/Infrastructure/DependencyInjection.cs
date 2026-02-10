@@ -9,6 +9,7 @@ using Domain.Entities.Users;
 using Hangfire;
 using Infrastructure.Data;
 using Infrastructure.Data.Interceptors;
+using Infrastructure.Data.Seeding;
 using Infrastructure.Identity;
 using Infrastructure.Identity.JWT;
 using Infrastructure.Services.Caching;
@@ -48,6 +49,7 @@ namespace Infrastructure
             builder.Services.AddSingleton(TimeProvider.System);
 
             // --- REFACTOR: Split IIdentityService ---
+            builder.Services.AddScoped<ApplicationDbContextInitialiser>();
             builder.Services.AddScoped<IdentityService>();
             builder.Services.AddScoped<IAuthenticationService>(sp => sp.GetRequiredService<IdentityService>());
             builder.Services.AddScoped<IPasswordManagementService>(sp => sp.GetRequiredService<IdentityService>());
@@ -127,9 +129,9 @@ namespace Infrastructure
         {
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
-                o.Password.RequireDigit = true;
-                o.Password.RequireLowercase = true;
-                o.Password.RequireUppercase = true;
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
                 o.User.RequireUniqueEmail = true;
