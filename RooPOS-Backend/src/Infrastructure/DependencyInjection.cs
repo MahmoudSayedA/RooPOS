@@ -3,6 +3,7 @@ using Application.Common.Abstractions.Caching;
 using Application.Common.Abstractions.Data;
 using Application.Common.Abstractions.Messaging;
 using Application.Features.Products.Services;
+using Application.Features.Users.Services;
 using Application.Identity.Services;
 using Domain.Constants;
 using Domain.Entities.Users;
@@ -15,6 +16,7 @@ using Infrastructure.Identity.JWT;
 using Infrastructure.Services.Caching;
 using Infrastructure.Services.Messaging;
 using Infrastructure.Services.Products;
+using Infrastructure.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +51,8 @@ namespace Infrastructure
             builder.Services.AddSingleton(TimeProvider.System);
 
             // --- REFACTOR: Split IIdentityService ---
+            builder.Services.AddScoped<IUserService, UserService>();
+
             builder.Services.AddScoped<ApplicationDbContextInitialiser>();
             builder.Services.AddScoped<IdentityService>();
             builder.Services.AddScoped<IAuthenticationService>(sp => sp.GetRequiredService<IdentityService>());
