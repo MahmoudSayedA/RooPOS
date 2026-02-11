@@ -8,8 +8,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Application.Identity.Commands;
 public class RegisterCommand : ICommand<string>
 {
+    public string? FullName { get; set; }
+
     [Required]
-    
     [StringLength(50, MinimumLength = 3)]
     public required string Username { get; set; }
 
@@ -42,6 +43,7 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, string>
             Username = request.Username,
             Email = request.Email,
             Password = request.Password,
+            FullName = request.FullName
         });
         if (!result.Succeeded)
         {
@@ -57,7 +59,7 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, string>
         {
             UserId = Guid.Parse(result.Data.ToString()),
             Email = request.Email,
-            UserName = request.Username
+            UserName = request.Username,
         };
         await _publisher.Publish(userRegisterEvent, cancellationToken);
 
