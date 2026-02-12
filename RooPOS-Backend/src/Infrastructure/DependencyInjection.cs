@@ -3,17 +3,20 @@ using Application.Common.Abstractions.Caching;
 using Application.Common.Abstractions.Data;
 using Application.Common.Abstractions.Messaging;
 using Application.Features.Products.Services;
+using Application.Features.Users.Services;
 using Application.Identity.Services;
 using Domain.Constants;
 using Domain.Entities.Users;
 using Hangfire;
 using Infrastructure.Data;
 using Infrastructure.Data.Interceptors;
+using Infrastructure.Data.Seeding;
 using Infrastructure.Identity;
 using Infrastructure.Identity.JWT;
 using Infrastructure.Services.Caching;
 using Infrastructure.Services.Messaging;
 using Infrastructure.Services.Products;
+using Infrastructure.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +51,9 @@ namespace Infrastructure
             builder.Services.AddSingleton(TimeProvider.System);
 
             // --- REFACTOR: Split IIdentityService ---
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<ApplicationDbContextInitialiser>();
             builder.Services.AddScoped<IdentityService>();
             builder.Services.AddScoped<IAuthenticationService>(sp => sp.GetRequiredService<IdentityService>());
             builder.Services.AddScoped<IPasswordManagementService>(sp => sp.GetRequiredService<IdentityService>());
@@ -127,9 +133,9 @@ namespace Infrastructure
         {
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
-                o.Password.RequireDigit = true;
-                o.Password.RequireLowercase = true;
-                o.Password.RequireUppercase = true;
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
                 o.User.RequireUniqueEmail = true;

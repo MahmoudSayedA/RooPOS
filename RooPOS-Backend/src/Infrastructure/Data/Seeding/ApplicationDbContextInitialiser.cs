@@ -1,21 +1,24 @@
 ﻿using Domain.Constants;
 using Domain.Entities.Users;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data.Seeding;
 
 public static class InitialiserExtensions
 {
-    //public static async Task InitialiseDatabaseAsync(this IApplicationBuilder app)
-    //{
-    //    using var scope = app.ApplicationServices.CreateScope();
+    public static async Task InitializeDatabaseAsync(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
 
-    //    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
 
-    //    await initialiser.InitialiseAsync();
-    //    await initialiser.SeedAsync();
-    //}
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
 }
 
 public class ApplicationDbContextInitialiser(
@@ -28,7 +31,6 @@ public class ApplicationDbContextInitialiser(
     {
         try
         {
-            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
         catch (Exception ex)
@@ -54,22 +56,31 @@ public class ApplicationDbContextInitialiser(
     private async Task TrySeedAsync()
     {
         // Default roles
-        var adminRole = new ApplicationRole() { Name = Roles.Admin };
-
-        if (roleManager.Roles.All(r => r.Name != adminRole.Name))
+        var roles = new[]
         {
-            await roleManager.CreateAsync(adminRole);
+            new ApplicationRole { Name = Roles.Admin },
+            new ApplicationRole { Name = Roles.Manager },
+            new ApplicationRole { Name = Roles.Cashier },
+            new ApplicationRole { Name = Roles.StoreKeeper }
+        };
+
+        if (!roleManager.Roles.AsNoTracking().Any())
+        {
+            foreach (var role in roles)
+            {
+                await roleManager.CreateAsync(role);
+            }
         }
          
         // Default users
-        var admin = new ApplicationUser { UserName = "admin@localhost", Email = "admin@localhost" };
+        var admin = new ApplicationUser { UserName = "admin@roopos", Email = "admin@roopos.com", EmailConfirmed = true };
 
-        if (userManager.Users.All(u => u.UserName != admin.UserName))
+        if (userManager.Users.AsNoTracking().All(u => u.UserName != admin.UserName))
         {
-            await userManager.CreateAsync(admin, "Admin1!");
-            if (!string.IsNullOrWhiteSpace(adminRole.Name))
+            var result =  await userManager.CreateAsync(admin, "123456");
+            if (result.Succeeded)
             {
-                await userManager.AddToRolesAsync(admin, new[] { adminRole.Name });
+                await userManager.AddToRoleAsync(admin, Roles.Admin);
             }
         }
         // defualt data

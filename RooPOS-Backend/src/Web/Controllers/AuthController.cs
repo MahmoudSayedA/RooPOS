@@ -10,6 +10,7 @@ public class AuthController(ISender mediator) : ControllerBase
     private readonly ISender _mediator = mediator;
 
     [HttpPost("register")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command)
     {
         var userId = await _mediator.Send(command);

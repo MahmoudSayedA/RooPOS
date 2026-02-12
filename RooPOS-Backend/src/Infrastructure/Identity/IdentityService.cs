@@ -67,10 +67,10 @@ public class IdentityService : IAuthenticationService,
             await _userManager.AccessFailedAsync(user);
             throw new UnauthorizedAccessException("Invalid login attempt.");
         }
-        if (!user.EmailConfirmed)
-        {
-            throw new UnauthorizedAccessException("Email is not confirmed.");
-        }
+        //if (!user.EmailConfirmed)
+        //{
+        //    throw new UnauthorizedAccessException("Email is not confirmed.");
+        //}
         ICollection<string> roles = await _userManager.GetRolesAsync(user);
         var token = await _tokenGenerator.GenerateJwtToken(user);
 
