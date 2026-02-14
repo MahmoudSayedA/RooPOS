@@ -13,10 +13,12 @@ The system focuses on **simplicity, offline-first usage, and affordability**, pr
 ## Remote Access
 
 Api is hosting now on a remote server, and can be accessed via the following URL:
+- [link](http://roo-pos.runasp.net)
 ```
 http://roo-pos.runasp.net
 ```
 ## API Documentation
+- [link](http://roo-pos.runasp.net/swagger/index.html)
 ```
 http://roo-pos.runasp.net/swagger/index.html
 ```
