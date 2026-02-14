@@ -4,6 +4,16 @@ This is the backend API for **RooPOS**, built with **.NET** and designed to work
 
 ---
 
+## Remote Access
+
+Api is hosting now on a remote server, and can be accessed via the following URL:
+```
+http://roo-pos.runasp.net
+```
+## API Documentation
+```
+http://roo-pos.runasp.net/swagger/index.html
+```
 ## 🛠 Technology Stack
 
 - .NET (Web API)
