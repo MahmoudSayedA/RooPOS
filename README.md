@@ -10,6 +10,18 @@ The system focuses on **simplicity, offline-first usage, and affordability**, pr
 
 ---
 
+## Remote Access
+
+Api is hosting now on a remote server, and can be accessed via the following URL:
+```
+http://roo-pos.runasp.net
+```
+## API Documentation
+```
+http://roo-pos.runasp.net/swagger/index.html
+```
+---
+
 ## Problem Statement
 
 Small businesses often rely on:
